@@ -43,10 +43,10 @@ spec:
     volumeMounts:
       - name: "test-volume"
         mountPath: "/tmp"
-    #secrets:
-      #- name: delegationtoken
-      #  path: /mnt/secrets
-      #  secretType: HadoopDelegationToken
+    secrets:
+      - name: delegationtoken
+        path: /mnt/secrets
+        secretType: HadoopDelegationToken
   executor:
     cores: 1
     instances: 1
@@ -56,7 +56,7 @@ spec:
     volumeMounts:
       - name: "test-volume"
         mountPath: "/tmp"
-    #secrets:
-    # - name: delegationtoken
-    #   path: /mnt/secrets
-    #   secretType: HadoopDelegationToken
+    secrets:
+     - name: delegationtoken
+       path: /mnt/secrets
+       secretType: HadoopDelegationToken
