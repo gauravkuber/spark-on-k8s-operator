@@ -1,0 +1,51 @@
+apiVersion: "sparkoperator.k8s.io/v1beta2"
+kind: SparkApplication
+metadata:
+  name: spark-pi-working
+  namespace: spark-operator
+spec:
+  type: Scala
+  mode: cluster
+  image: "gauravkuber/spark:sleepdriver"
+  imagePullPolicy: Always
+  mainClass: org.apache.spark.examples.SparkPi
+  mainApplicationFile: "local:///opt/spark/examples/jars/spark-examples_2.12-3.2.0.jar"
+  sparkVersion: "3.1.1"
+  restartPolicy:
+    type: Never
+  volumes:
+    - name: "test-volume"
+      hostPath:
+        path: "/tmp"
+        type: Directory
+  driver:
+    kubernetesMaster: https://k8s-apiserver-kubernetes-batch01.phx5.uber.internal:6443
+    cores: 1
+    coreLimit: "1200m"
+    memory: "512m"
+    labels:
+      version: 3.1.1
+      PELOTON_JOB_ID: "d5ad5b90-2c68-43b7-a334-3c0764b612bf"
+      peloton.job_type: "BATCH"
+      peloton.job_name: "spark-pi-working"
+      UDEPLOY_INSTANCE_ID: "1"
+      UBER_CLUSTER: "phx5-batch01"
+    serviceAccount: sparkoperator
+    volumeMounts:
+      - name: "test-volume"
+        mountPath: "/tmp"
+    hostNetwork: true
+  executor:
+    cores: 1
+    instances: 3
+    memory: "512m"
+    labels:
+      version: 3.1.1
+      PELOTON_JOB_ID: "d5ad5b90-2c68-43b7-a334-3c0764b612bf"
+      peloton.job_type: "BATCH"
+      peloton.job_name: "spark-pi-working"
+      UDEPLOY_INSTANCE_ID: "1"
+      UBER_CLUSTER: "phx5-batch01"
+    volumeMounts:
+      - name: "test-volume"
+        mountPath: "/tmp"
